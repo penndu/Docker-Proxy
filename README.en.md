@@ -101,7 +101,7 @@ Deploy quickly with Koyeb: [View Tutorial](Koyeb/README.md)
 <summary><strong>Manual Container Deployment</strong></summary>
 <div>
 
-**⚠️ Note:** Download the configuration for the image repository you wish to accelerate. The `docker-compose.yaml` file is set to deploy all domestic image repository acceleration services by default. Similarly, you should configure and deploy the one you need, and simply remove the rest!
+**⚠️ Note:** Download the configuration for whichever mirror repository you need to accelerate. The `docker-compose.yaml` file by default deploys the acceleration service for all foreign mirror repositories, again you configure whichever one you deploy, and delete the rest!
 
 **1.** Download the corresponding `yml` file from the [config](https://github.com/dqzboy/Docker-Proxy/tree/main/config) directory to your local machine.
 
@@ -184,28 +184,9 @@ docker pull gcr.your_domain_name/google-containers/pause:3.1
 
 ---
 
-**Regarding the scheme for pulling images from the Docker Hub public space without adding "library" when using an image acceleration**
-
-- This scheme was provided by a senior member in the communication group and has been implemented and tested through Nginx.
-```shell
-location ^~ / {
-    if ($request_uri ~  ^/v2/([^/]+)/(manifests|blobs)/(.*)$) {
-            rewrite ^/v2/(.*)$ /v2/library/$1 break;
-    }
-
-    proxy_pass http://127.0.0.1:51000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header REMOTE-HOST $remote_addr;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection $connection_upgrade;
-    proxy_http_version 1.1;
-    add_header X-Cache $upstream_cache_status;
-}
-```
-
-> Detailed Tutorial: [Self-built Docker Image Acceleration Service: Accelerating and Optimizing Image Management](https://www.dqzboy.com/8709.html)
+> **Detailed Tutorial:**  <br>
+> [Self-built Docker Image Acceleration Service: Accelerating and Optimizing Image Management](https://www.dqzboy.com/8709.html) <br>
+> [Build your own Docker image acceleration, and host the domain name to CF to accelerate image pulling.](https://www.dqzboy.com/17665.html)
 
 ## 📚 Display
 <br/>
@@ -222,6 +203,23 @@ location ^~ / {
 
 ## 💻 UI
 ![docker-proxy](https://github.com/dqzboy/Docker-Proxy/assets/42825450/0ddb041b-64f6-4d93-b5bf-85ad3b53d0e0)
+
+
+---
+
+## 🫶 Sponsorship
+If you find this project helpful, please give it a Star. And if possible, you can also give me a little support. Thank you very much for your support.😊
+
+<table>
+    <tr>
+      <td width="50%" align="center"><b> Alipay </b></td>
+      <td width="50%" align="center"><b> WeChat Pay </b></td>
+    </tr>
+    <tr>
+        <td width="50%" align="center"><img src="https://github.com/dqzboy/Deploy_K8sCluster/assets/42825450/223fd099-9433-468b-b490-f9807bdd2035?raw=true"></td>
+        <td width="50%" align="center"><img src="https://github.com/dqzboy/Deploy_K8sCluster/assets/42825450/9404460f-ea1b-446c-a0ae-6da96eb459e3?raw=true"></td>
+    </tr>
+</table>
 
 ---
 
@@ -242,22 +240,28 @@ location ^~ / {
 #### 3、How long does the registry image cache last, and how to adjust it?
 **Known Issue：** The default cache time is 168 hours, which is 7 days. Adjust the cache time by modifying the ttl in the proxy configuration section of the configuration file
 
+#### 4、Regarding the scheme for pulling images from the `Hub` public space without adding `library` when using an image acceleration
+
+- This scheme was provided by a senior member in the communication group and has been implemented and tested through Nginx.
+```shell
+location ^~ / {
+    if ($request_uri ~  ^/v2/([^/]+)/(manifests|blobs)/(.*)$) {
+            rewrite ^/v2/(.*)$ /v2/library/$1 break;
+    }
+
+    proxy_pass http://127.0.0.1:51000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header REMOTE-HOST $remote_addr;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_http_version 1.1;
+    add_header X-Cache $upstream_cache_status;
+}
+```
+
 ---
-
-## 🫶 Sponsorship
-If you find this project helpful, please give it a Star. And if possible, you can also give me a little support. Thank you very much for your support.😊
-
-<table>
-    <tr>
-      <td width="50%" align="center"><b> Alipay </b></td>
-      <td width="50%" align="center"><b> WeChat Pay </b></td>
-    </tr>
-    <tr>
-        <td width="50%" align="center"><img src="https://github.com/dqzboy/Deploy_K8sCluster/assets/42825450/223fd099-9433-468b-b490-f9807bdd2035?raw=true"></td>
-        <td width="50%" align="center"><img src="https://github.com/dqzboy/Deploy_K8sCluster/assets/42825450/9404460f-ea1b-446c-a0ae-6da96eb459e3?raw=true"></td>
-    </tr>
-</table>
-
 
 ## 😺 Other
 
